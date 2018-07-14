@@ -45,11 +45,13 @@ namespace AppoAlert
             Rule selectedRule = getRuleFromList(ruleId);
             if (selectedRule != null)
             {
-                Task ruleWorker = new Task(() => WorkerStarter(selectedRule));
-                selectedRule.Running = 1;
-                RuleWorkers.Add(ruleWorker);
-                ruleWorker.Start();
-                Console.WriteLine("Success");
+                using (Task ruleWorker = new Task(() => WorkerStarter(selectedRule)))
+                {
+                    selectedRule.Running = 1;
+                    RuleWorkers.Add(ruleWorker);
+                    ruleWorker.Start();
+                    Console.WriteLine("Success");
+                }
             }
             else
             {
@@ -88,14 +90,26 @@ namespace AppoAlert
                 Thread.Sleep(selectedRule.RefreshTime);
                 if (selectedRule.Running == 1)
                 {
-                    WebClient httpRunner = new WebClient();
-                    string webSiteContent = httpRunner.DownloadString(selectedRule.URL);
-                    if (webSiteContent.IndexOf(selectedRule.Content) != -1)
+                    using (WebClient httpRunner = new WebClient())
                     {
-                        Console.WriteLine("Founded string!");
+                        string webSiteContent = httpRunner.DownloadString(selectedRule.URL);
+                        if (selectedRule.Running == 0)
+                        {
+                            break;
+                        }
+                        if (webSiteContent.IndexOf(selectedRule.Content) != -1)
+                        {
+                            Console.WriteLine("Founded string!");
+                        }
                     }
+                    
+                }
+                else
+                {
+                    break;
                 }
             }
+            return new Task(() => { });
         }
 
         public static void writeRulesToConsole()
