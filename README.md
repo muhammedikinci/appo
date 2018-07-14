@@ -37,8 +37,3 @@ Content Alert
 | Linux  | NONE YET |
 | Windows | NONE YET |
 | MacOs | NONE YET |
-
-#### Manage Memory Usage
-
-* Not using variables move to trash in Task functions.
-* Breaking finished Task and remove all variables.
