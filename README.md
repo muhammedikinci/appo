@@ -17,6 +17,17 @@ Detect changes
 >> appo start 0
 ```
 
+```sh
+// All Rules
+>> appo rules
+
+// Remove rule
+>> appo remove-rule 0
+
+// Remove all rules
+>> appo remove-all
+```
+
 ### Commands
 
 | Command Name | Status |
@@ -26,9 +37,11 @@ Detect changes
 | hide | NONE YET |
 | stop <<rule_id>> | OK |
 | start <<rule_id>> | OK |
+| remove-rule <<rule_id>> | OK |
+| remove-all | OK |
 | rules | OK |
-| start | WIP |
-| stop | WIP |
+| start all | WIP |
+| stop all | WIP |
 
 ### Features
 
