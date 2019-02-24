@@ -86,6 +86,29 @@ namespace AppoAlert
                             {
                                 BGWorker.writeRulesToConsole();
                             }
+                            else if (arr[1] == "remove-rule")
+                            {
+                                if (arr[2] != "")
+                                {
+                                    BGWorker.StopRule(int.Parse(arr[2]));
+                                    BGWorker.Rules.RemoveAll(x => x.RuleID == int.Parse(arr[2]));
+                                    Console.WriteLine("Rule removed");
+                                }
+                                else
+                                {
+                                    ErrorCaseBlock("empty_parameter");
+                                }
+                            }
+                            else if (arr[1] == "remove-all")
+                            {
+                                foreach (var item in BGWorker.Rules)
+                                {
+                                    BGWorker.StopRule(item.RuleID);
+                                }
+
+                                BGWorker.Rules.Clear();
+                                Console.WriteLine("Rules removed");
+                            }
                         }
                     }
                     else
