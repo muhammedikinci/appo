@@ -8,7 +8,9 @@ namespace AppoAlert
     {
         public int RuleID { get; set; }
         public string URL { get; set; }
-        public string Content { get; set; }
+        public string SourceContent { get; set; }
+        public string SearchedContent { get; set; }
+        public string Hash { get; set; }
         public int RefreshTime { get; set; }
         public int Running { get; set; }
     }

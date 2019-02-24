@@ -7,7 +7,7 @@ namespace AppoAlert
     {
         static void Main()
         {
-            while(true)
+            while (true)
             {
                 Console.Write(">>");
                 try
@@ -25,16 +25,13 @@ namespace AppoAlert
                             }
                             else if (arr[1] == "add-rule")
                             {
-                                if (arr.Length > 3)
+                                if (arr[2] == "sc")
                                 {
-                                    if (arr[2] != "" && arr[3] != "" && arr[4] != "")
-                                    {
-                                        BGWorker.AddRule(arr[2], arr[3], int.Parse(arr[4]));
-                                    }
-                                    else
-                                    {
-                                        ErrorCaseBlock("empty_parameter");
-                                    }
+                                    BGWorker.AddRule(arr[3], int.Parse(arr[5]), arr[5]);
+                                }
+                                else if (arr[2] == "cc")
+                                {
+                                    BGWorker.AddRule(arr[3], int.Parse(arr[4]));
                                 }
                                 else
                                 {

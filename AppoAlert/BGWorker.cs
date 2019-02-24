@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,16 +15,33 @@ namespace AppoAlert
         public static List<Rule> Rules = new List<Rule>();
         public static List<Task> RuleWorkers = new List<Task>();
 
-        public static void AddRule(string url, string content, int refreshtime)
+        public static void AddRule(string url, int refreshtime, string content = "")
         {
             Rule newRule = new Rule();
+
             newRule.Running = 0;
             newRule.URL = url;
             newRule.RuleID = getAvailableId();
             newRule.RefreshTime = refreshtime;
-            newRule.Content = content;
+            newRule.SearchedContent = content;
+
+            using (WebClient httpRunner = new WebClient())
+            {
+                newRule.SourceContent = httpRunner.DownloadString(url);
+            }
+
+            if (content == "")
+            {
+                using (var sha256 = SHA256.Create())
+                {
+                    var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(newRule.SourceContent));
+                    var hash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+                    newRule.Hash = hash;
+                }
+            }
 
             Rules.Add(newRule);
+
             Console.WriteLine("Success: New rule added.");
         }
 
@@ -92,17 +110,41 @@ namespace AppoAlert
                 {
                     using (WebClient httpRunner = new WebClient())
                     {
-                        string webSiteContent = httpRunner.DownloadString(selectedRule.URL);
-                        if (selectedRule.Running == 0)
+                        try
                         {
-                            break;
+                            string webSiteContent = httpRunner.DownloadString(selectedRule.URL);
+                            string hash = "";
+
+                            using (var sha256 = SHA256.Create())
+                            {
+                                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(webSiteContent));
+                                hash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+                            }
+
+                            if (selectedRule.Running == 0)
+                            {
+                                break;
+                            }
+
+                            if (selectedRule.SearchedContent != "")
+                            {
+                                if (webSiteContent.IndexOf(selectedRule.SearchedContent) != -1)
+                                {
+                                    Console.WriteLine("RULE WORKER >> <RULE:" + selectedRule.RuleID + "> Searched content founded");
+                                }
+                            }
+                            else if (selectedRule.Hash != hash)
+                            {
+                                Console.WriteLine("RULE WORKER >> <RULE:" + selectedRule.RuleID + "> Changes are detected in content");
+                                selectedRule.Hash = hash;
+                            }
                         }
-                        if (webSiteContent.IndexOf(selectedRule.Content) != -1)
+                        catch (Exception e)
                         {
-                            Console.WriteLine("Founded string!");
+                            Console.WriteLine("Rule ID:" + selectedRule.RuleID + "; Connecting problem: " + e.Message);
                         }
                     }
-                    
+
                 }
                 else
                 {
@@ -114,10 +156,20 @@ namespace AppoAlert
 
         public static void writeRulesToConsole()
         {
+            int RunningNow = 0;
+
             foreach (var item in Rules)
             {
-                Console.WriteLine("RuleID: " + item.RuleID + "; URL: " + item.URL + "; RefreshTime: " + item.RefreshTime + "; Content: " + item.Content + "; isRunning: " + item.Running);
+                Console.WriteLine("| RuleID: " + item.RuleID + "; URL: " + item.URL + "; RefreshTime: " + item.RefreshTime + "; isRunning: " + item.Running + " |");
+
+                RunningNow += item.Running;
             }
+
+            Console.WriteLine("-----------------------");
+            Console.WriteLine("Total Rules: " + Rules.Count.ToString());
+            Console.WriteLine("Running Now: " + RunningNow.ToString());
+            Console.WriteLine("Idled: " + (Rules.Count - RunningNow).ToString());
+            Console.WriteLine("-----------------------");
         }
 
         static Rule getRuleFromList(int ruleId)
