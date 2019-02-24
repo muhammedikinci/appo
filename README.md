@@ -3,8 +3,19 @@ Content Alert
 
 ### Usage
 
-![appo_alert](https://user-images.githubusercontent.com/11901620/42723437-78d4c7ae-8766-11e8-8301-6f2999b2e7e9.gif)
+Search in web content
 
+```sh
+>> appo add-rule sc http://localhost Happy! 1000
+>> appo start 0
+```
+
+Detect changes
+
+```sh
+>> appo add-rule cc http://localhost 1000
+>> appo start 0
+```
 
 ### Commands
 
