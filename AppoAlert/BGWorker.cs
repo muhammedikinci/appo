@@ -156,20 +156,61 @@ namespace AppoAlert
 
         public static void writeRulesToConsole()
         {
+            string Content = "";
+            string NewLine = "\n";
+            string Seperate = "│";
+            string WhiteSpace = " ";
             int RunningNow = 0;
+            int[] TopColumnsLength = new int[4] { 0, 0, 0, 0 };
+            List<string[]> Rows = new List<string[]>();
 
             foreach (var item in Rules)
             {
-                Console.WriteLine("| RuleID: " + item.RuleID + "; URL: " + item.URL + "; RefreshTime: " + item.RefreshTime + "; isRunning: " + item.Running + " |");
+                var RuleIDColumn = "RuleID: " + item.RuleID;
+                var URLColumn = "URL: " + item.URL;
+                var RefreshTimeColumn = "RefreshTime: " + item.RefreshTime;
+                var RunningColumn = "isRunning: " + item.Running;
+                var CurrentColumnsLength = new int[4] { RuleIDColumn.Length, URLColumn.Length, RefreshTimeColumn.Length, RunningColumn.Length };
 
+                for (int i = 0; i < 4; i++)
+                {
+                    if (TopColumnsLength[i] < CurrentColumnsLength[i])
+                    {
+                        TopColumnsLength[i] = CurrentColumnsLength[i];
+                    }
+                }
+
+                Rows.Add(new string[4] { RuleIDColumn, URLColumn, RefreshTimeColumn, RunningColumn });
                 RunningNow += item.Running;
             }
 
-            Console.WriteLine("-----------------------");
+            // Fill all columns and write
+            foreach (var item in Rows)
+            {
+                var RowText = "";
+
+                for (int i = 0; i < 4; i++)
+                {
+                    var FillValue = (TopColumnsLength[i] - item[i].Length) + 3;
+
+                    for (int j = 0; j < FillValue; j++)
+                    {
+                        item[i] += WhiteSpace;
+                    }
+
+                    RowText += Seperate + WhiteSpace + item[i];
+                }
+                
+                Content += NewLine + RowText + Seperate + NewLine;
+            }
+
+            Console.WriteLine(Content);
+
+            Console.WriteLine("──────────────────────────────────────");
             Console.WriteLine("Total Rules: " + Rules.Count.ToString());
             Console.WriteLine("Running Now: " + RunningNow.ToString());
             Console.WriteLine("Idled: " + (Rules.Count - RunningNow).ToString());
-            Console.WriteLine("-----------------------");
+            Console.WriteLine("──────────────────────────────────────");
         }
 
         static Rule getRuleFromList(int ruleId)
