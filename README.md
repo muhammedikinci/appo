@@ -6,6 +6,7 @@ Content Alert
 Search in web content
 
 ```sh
+// search content
 >> appo add-rule sc http://localhost Happy! 1000
 >> appo start 0
 ```
@@ -13,6 +14,7 @@ Search in web content
 Detect changes
 
 ```sh
+// changes content
 >> appo add-rule cc http://localhost 1000
 >> appo start 0
 ```
