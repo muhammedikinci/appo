@@ -30,12 +30,76 @@ Detect changes
 >> appo remove-all
 ```
 
+Load rules from file.
+```sh
+>>appo load
+>>7 Rules loaded successfully
+
+>>appo rules
+
+│ RuleID: 0   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
+
+│ RuleID: 1   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
+
+│ RuleID: 2   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
+
+│ RuleID: 3   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
+
+│ RuleID: 4   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
+
+│ RuleID: 5   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
+
+│ RuleID: 6   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
+
+──────────────────────────────────────
+Total Rules: 7
+Running Now: 0
+Idled: 7
+──────────────────────────────────────
+>>
+```
+
+Save rules and load
+```sh
+>>appo add-rule cc http://localhost 1000
+Success: New rule added. Rule Id 0
+>>appo save
+>>Rules saved successfully
+
+>>appo rules
+
+│ RuleID: 0   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
+
+──────────────────────────────────────
+Total Rules: 1
+Running Now: 0
+Idled: 1
+──────────────────────────────────────
+>>appo remove-all
+Success: 0 rule is stopped.
+Rules removed
+>>appo load
+>>1 Rules loaded successfully
+
+>>appo rules
+
+│ RuleID: 0   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
+
+──────────────────────────────────────
+Total Rules: 1
+Running Now: 0
+Idled: 1
+──────────────────────────────────────
+>>
+```
+
 ### Commands
 
 | Command Name | Status |
 | ------ | ------ |
 | add-rule  | OK |
-| load-rule | NONE YET |
+| load | OK |
+| save | OK |
 | hide | NONE YET |
 | stop <<rule_id>> | OK |
 | start <<rule_id>> | OK |
