@@ -239,31 +239,27 @@ namespace AppoAlert
             var RulesFile = File.OpenWrite(RulesFileName);
             var databyte = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(Rules));
 
-            RulesFile.BeginWrite(databyte, 0, databyte.Length - 1, new AsyncCallback(AfterWrite), RulesFile);
+            RulesFile.BeginWrite(databyte, 0, databyte.Length, new AsyncCallback(AfterWriteCallback), RulesFile);
         }
 
-        static void AfterWrite(IAsyncResult R)
+        static void AfterWriteCallback(IAsyncResult R)
         {
             FileStream state = (FileStream)R.AsyncState;
 
             state.EndWrite(R);
+            state.Dispose();
 
-            if (R.IsCompleted)
-            {
-                Console.WriteLine("Rules saved successfully");
-                state.Flush();
-                state.Dispose();
-            }
+            Console.WriteLine("Rules saved successfully");
         }
 
         public static void LoadRules()
         {
             var RulesFile = File.OpenRead(RulesFileName);
 
-            RulesFile.BeginRead(JsonBuffer, 0, JsonBuffer.Length, new AsyncCallback(AfterRead), RulesFile);
+            RulesFile.BeginRead(JsonBuffer, 0, JsonBuffer.Length, new AsyncCallback(AfterReadCallback), RulesFile);
         }
 
-        static void AfterRead(IAsyncResult R)
+        static void AfterReadCallback(IAsyncResult R)
         {
             FileStream state = (FileStream)R.AsyncState;
 
@@ -275,18 +271,10 @@ namespace AppoAlert
 
                 Array.Copy(JsonBuffer, ResultArr, readedcontentlength);
 
-                var encodedstring = Encoding.ASCII.GetString(ResultArr);
-
-                if (encodedstring[encodedstring.Length - 1] != ']')
-                {
-                    encodedstring += "]";
-                }
-
-                Rules = JsonConvert.DeserializeObject<List<Rule>>(encodedstring);
+                Rules = JsonConvert.DeserializeObject<List<Rule>>(Encoding.ASCII.GetString(ResultArr));
+                state.Dispose();
 
                 Console.WriteLine("{0} Rules loaded successfully", Rules.Count);
-                state.Flush();
-                state.Dispose();
             }
         }
     }
