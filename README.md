@@ -42,8 +42,8 @@ Detect changes
 | remove-rule <<rule_id>> | OK |
 | remove-all | OK |
 | rules | OK |
-| start all | WIP |
-| stop all | WIP |
+| start all | OK |
+| stop all | OK |
 
 ### Features
 
