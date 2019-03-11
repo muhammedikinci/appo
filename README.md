@@ -100,7 +100,6 @@ Idled: 1
 | add-rule  | OK |
 | load | OK |
 | save | OK |
-| hide | NONE YET |
 | stop <<rule_id>> | OK |
 | start <<rule_id>> | OK |
 | remove-rule <<rule_id>> | OK |
