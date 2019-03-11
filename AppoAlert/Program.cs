@@ -133,6 +133,11 @@ namespace AppoAlert
                             }
                             else if (arr[1] == "load")
                             {
+                                foreach (var item in BGWorker.Rules)
+                                {
+                                    BGWorker.StopRule(item.RuleID);
+                                }
+
                                 BGWorker.LoadRules();
                             }
                         }
