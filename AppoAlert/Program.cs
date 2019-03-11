@@ -127,6 +127,14 @@ namespace AppoAlert
                                 BGWorker.Rules.Clear();
                                 Console.WriteLine("Rules removed");
                             }
+                            else if (arr[1] == "save")
+                            {
+                                BGWorker.SaveRules();
+                            }
+                            else if (arr[1] == "load")
+                            {
+                                BGWorker.LoadRules();
+                            }
                         }
                     }
                     else

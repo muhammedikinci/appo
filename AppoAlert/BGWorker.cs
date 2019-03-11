@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace AppoAlert
 {
     class BGWorker
     {
+        static string RulesFileName = "rules.json";
+        static byte[] JsonBuffer = new byte[60000];
+
         public static List<Rule> Rules = new List<Rule>();
         public static List<Task> RuleWorkers = new List<Task>();
 
@@ -231,5 +234,60 @@ namespace AppoAlert
             return currentReturning;
         }
 
+        public static void SaveRules()
+        {
+            var RulesFile = File.OpenWrite(RulesFileName);
+            var databyte = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(Rules));
+
+            RulesFile.BeginWrite(databyte, 0, databyte.Length - 1, new AsyncCallback(AfterWrite), RulesFile);
+        }
+
+        static void AfterWrite(IAsyncResult R)
+        {
+            FileStream state = (FileStream)R.AsyncState;
+
+            state.EndWrite(R);
+
+            if (R.IsCompleted)
+            {
+                Console.WriteLine("Rules saved successfully");
+                state.Flush();
+                state.Dispose();
+            }
+        }
+
+        public static void LoadRules()
+        {
+            var RulesFile = File.OpenRead(RulesFileName);
+
+            RulesFile.BeginRead(JsonBuffer, 0, JsonBuffer.Length, new AsyncCallback(AfterRead), RulesFile);
+        }
+
+        static void AfterRead(IAsyncResult R)
+        {
+            FileStream state = (FileStream)R.AsyncState;
+
+            int readedcontentlength = state.EndRead(R);
+
+            if (R.IsCompleted)
+            {
+                byte[] ResultArr = new byte[readedcontentlength];
+
+                Array.Copy(JsonBuffer, ResultArr, readedcontentlength);
+
+                var encodedstring = Encoding.ASCII.GetString(ResultArr);
+
+                if (encodedstring[encodedstring.Length - 1] != ']')
+                {
+                    encodedstring += "]";
+                }
+
+                Rules = JsonConvert.DeserializeObject<List<Rule>>(encodedstring);
+
+                Console.WriteLine("{0} Rules loaded successfully", Rules.Count);
+                state.Flush();
+                state.Dispose();
+            }
+        }
     }
 }
