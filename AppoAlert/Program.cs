@@ -48,7 +48,16 @@ namespace AppoAlert
                             }
                             else if (arr[1] == "stop")
                             {
-                                if (arr.Length > 1)
+                                if (arr[2] == "all")
+                                {
+                                    foreach (var item in BGWorker.Rules)
+                                    {
+                                        BGWorker.StopRule(item.RuleID);
+                                    }
+
+                                    Console.WriteLine("All rules stopped!");
+                                }
+                                else if (arr.Length > 1)
                                 {
                                     if (arr[2] != "")
                                     {
@@ -68,7 +77,16 @@ namespace AppoAlert
                             {
                                 if (arr.Length > 1)
                                 {
-                                    if (arr[2] != "")
+                                    if (arr[2] == "all")
+                                    {
+                                        foreach (var item in BGWorker.Rules)
+                                        {
+                                            BGWorker.StartRule(item.RuleID);
+                                        }
+
+                                        Console.WriteLine("All rules started!");
+                                    }
+                                    else if (arr[2] != "")
                                     {
                                         BGWorker.StartRule(int.Parse(arr[2]));
                                     }

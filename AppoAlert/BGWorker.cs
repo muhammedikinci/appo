@@ -42,7 +42,7 @@ namespace AppoAlert
 
             Rules.Add(newRule);
 
-            Console.WriteLine("Success: New rule added.");
+            Console.WriteLine("Success: New rule added. Rule Id {0}", newRule.RuleID);
         }
 
         public static void RemoveRule(int rule_id)
@@ -50,7 +50,7 @@ namespace AppoAlert
             Rules.Remove(getRuleFromList(rule_id));
             if (getRuleFromList(rule_id) == null)
             {
-                Console.WriteLine("Success: Rule removed.");
+                Console.WriteLine("Success: {0} removed.", rule_id);
             }
             else
             {
@@ -68,12 +68,12 @@ namespace AppoAlert
                     selectedRule.Running = 1;
                     RuleWorkers.Add(ruleWorker);
                     ruleWorker.Start();
-                    Console.WriteLine("Success");
+                    Console.WriteLine("{0} Started!", ruleId);
                 }
             }
             else
             {
-                Console.WriteLine("We have a problem: Selected task is not defined bro.");
+                Console.WriteLine("We have a problem: {0} task is not defined bro.", ruleId);
             }
         }
 
@@ -83,22 +83,12 @@ namespace AppoAlert
             if (selectedRule != null)
             {
                 selectedRule.Running = 0;
-                Console.WriteLine("Success: Selected rule is stopped.");
+                Console.WriteLine("Success: {0} rule is stopped.", ruleId);
             }
             else
             {
                 Console.WriteLine("We have a problem: Selected task is not defined bro.");
             }
-        }
-
-        public static void StartRules()
-        {
-
-        }
-
-        public static void StopRules()
-        {
-
         }
 
         static Task WorkerStarter(Rule selectedRule)
