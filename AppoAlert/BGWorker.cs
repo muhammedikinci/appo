@@ -12,7 +12,7 @@ namespace AppoAlert
 {
     class BGWorker
     {
-        static string RulesFileName = "rules.json";
+        public static string RulesFileName = "rules.json";
         static byte[] JsonBuffer = new byte[60000];
 
         public static List<Rule> Rules = new List<Rule>();
@@ -64,37 +64,36 @@ namespace AppoAlert
         public static void StartRule(int ruleId)
         {
             Rule selectedRule = getRuleFromList(ruleId);
-            if (selectedRule != null)
+            if (selectedRule != null && selectedRule.Running == 0)
             {
-                using (Task ruleWorker = new Task(() => WorkerStarter(selectedRule)))
-                {
-                    selectedRule.Running = 1;
-                    RuleWorkers.Add(ruleWorker);
-                    ruleWorker.Start();
-                    Console.WriteLine("{0} Started!", ruleId);
-                }
+                Task RuleWorker = new Task(() => { WorkerStarter(selectedRule); });
+                RuleWorker.Start();
+
+                selectedRule.Running = 1;
+                RuleWorkers.Add(RuleWorker);
+                Console.WriteLine("{0} Started!", ruleId);
             }
             else
             {
-                Console.WriteLine("We have a problem: {0} task is not defined bro.", ruleId);
+                Console.WriteLine("{0} task is not defined or started.", ruleId);
             }
         }
 
         public static void StopRule(int ruleId)
         {
             Rule selectedRule = getRuleFromList(ruleId);
-            if (selectedRule != null)
+            if (selectedRule != null && selectedRule.Running == 1)
             {
                 selectedRule.Running = 0;
                 Console.WriteLine("Success: {0} rule is stopped.", ruleId);
             }
             else
             {
-                Console.WriteLine("We have a problem: Selected task is not defined bro.");
+                Console.WriteLine("Selected task is not defined or stopped.");
             }
         }
 
-        static Task WorkerStarter(Rule selectedRule)
+        static void WorkerStarter(Rule selectedRule)
         {
             while (true)
             {
@@ -144,7 +143,6 @@ namespace AppoAlert
                     break;
                 }
             }
-            return new Task(() => { });
         }
 
         public static void writeRulesToConsole()

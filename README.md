@@ -7,35 +7,35 @@ Search in web content
 
 ```sh
 // search content
->> appo add-rule sc http://localhost Happy! 1000
->> appo start 0
+>> add-rule sc http://localhost Happy! 1000
+>> start 0
 ```
 
 Detect changes
 
 ```sh
 // changes content
->> appo add-rule cc http://localhost 1000
->> appo start 0
+>> add-rule cc http://localhost 1000
+>> start 0
 ```
 
 ```sh
 // All Rules
->> appo rules
+>> rules
 
 // Remove rule
->> appo remove-rule 0
+>> remove-rule 0
 
 // Remove all rules
->> appo remove-all
+>> remove-all
 ```
 
 Load rules from file.
 ```sh
->>appo load
+>>load
 >>7 Rules loaded successfully
 
->>appo rules
+>>rules
 
 │ RuleID: 0   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
 
@@ -61,12 +61,12 @@ Idled: 7
 
 Save rules and load
 ```sh
->>appo add-rule cc http://localhost 1000
+>>add-rule cc http://localhost 1000
 Success: New rule added. Rule Id 0
->>appo save
+>>save
 >>Rules saved successfully
 
->>appo rules
+>>rules
 
 │ RuleID: 0   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
 
@@ -75,13 +75,13 @@ Total Rules: 1
 Running Now: 0
 Idled: 1
 ──────────────────────────────────────
->>appo remove-all
+>>remove-all
 Success: 0 rule is stopped.
 Rules removed
->>appo load
+>>load
 >>1 Rules loaded successfully
 
->>appo rules
+>>rules
 
 │ RuleID: 0   │ URL: http://localhost   │ RefreshTime: 1000   │ isRunning: 0   │
 
