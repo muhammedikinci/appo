@@ -133,12 +133,12 @@ Idled: 1
 
 | Command Name | Status |
 | ------ | ------ |
-| add-rule <<type>> <<url>> <<time>> <<content>> | OK |
+| add-rule type url time content | OK |
 | load | OK |
 | save | OK |
-| stop <<rule_id>> | OK |
-| start <<rule_id>> | OK |
-| remove-rule <<rule_id>> | OK |
+| stop rule_id | OK |
+| start rule_id | OK |
+| remove-rule rule_id | OK |
 | remove-all | OK |
 | rules | OK |
 | start-all | OK |
