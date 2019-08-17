@@ -133,7 +133,7 @@ Idled: 1
 
 | Command Name | Status |
 | ------ | ------ |
-| add-rule  | OK |
+| add-rule <<type>> <<url>> <<time>> <<content>> | OK |
 | load | OK |
 | save | OK |
 | stop <<rule_id>> | OK |
@@ -165,4 +165,4 @@ Idled: 1
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
