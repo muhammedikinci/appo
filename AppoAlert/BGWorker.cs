@@ -18,7 +18,7 @@ namespace AppoAlert
         public static List<Rule> Rules = new List<Rule>();
         public static List<Task> RuleWorkers = new List<Task>();
 
-        public static void AddRule(string url, int refreshtime, string content = "")
+        public static void AddRule(string type, string url, int refreshtime, string content = "")
         {
             Rule newRule = new Rule();
 
@@ -27,13 +27,14 @@ namespace AppoAlert
             newRule.RuleID = getAvailableId();
             newRule.RefreshTime = refreshtime;
             newRule.SearchedContent = content;
+            newRule.Type = type;
 
             using (WebClient httpRunner = new WebClient())
             {
                 newRule.SourceContent = httpRunner.DownloadString(url);
             }
 
-            if (content == "")
+            if (type == "cc" && !string.IsNullOrEmpty(content))
             {
                 using (var sha256 = SHA256.Create())
                 {
@@ -41,6 +42,13 @@ namespace AppoAlert
                     var hash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
                     newRule.Hash = hash;
                 }
+            }
+            else if (type == "cc" && !string.IsNullOrEmpty(content) && newRule.SourceContent.IndexOf(content) != -1) {
+                Console.WriteLine("The specified content was found. You will be notified when the change is detected.");
+            }
+            else if (type == "sc" && !string.IsNullOrEmpty(content) && newRule.SourceContent.IndexOf(content) == -1)
+            {
+                Console.WriteLine("The specified content does not exist on the site. You will be notified when content is added.");
             }
 
             Rules.Add(newRule);
@@ -118,17 +126,31 @@ namespace AppoAlert
                                 break;
                             }
 
-                            if (selectedRule.SearchedContent != "")
+                            if (selectedRule.SearchedContent != "" && selectedRule.Type == "sc")
                             {
                                 if (webSiteContent.IndexOf(selectedRule.SearchedContent) != -1)
                                 {
                                     Console.WriteLine("RULE WORKER >> <RULE:" + selectedRule.RuleID + "> Searched content founded");
+
+                                    selectedRule.Running = 0;
+                                    break;
                                 }
                             }
-                            else if (selectedRule.Hash != hash)
+
+                            if (selectedRule.Hash != hash && selectedRule.Type == "cc" && selectedRule.SearchedContent == "")
                             {
                                 Console.WriteLine("RULE WORKER >> <RULE:" + selectedRule.RuleID + "> Changes are detected in content");
                                 selectedRule.Hash = hash;
+
+                                selectedRule.Running = 0;
+                                break;
+                            }
+                            else if (selectedRule.Type == "cc" && selectedRule.SearchedContent != "" && webSiteContent.IndexOf(selectedRule.SearchedContent) != -1)
+                            {
+                                Console.WriteLine("RULE WORKER >> <RULE:" + selectedRule.RuleID + "> The specified content was changed or removed.");
+
+                                selectedRule.Running = 0;
+                                break;
                             }
                         }
                         catch (Exception e)

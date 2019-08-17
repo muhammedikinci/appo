@@ -97,14 +97,7 @@ namespace AppoAlert
         }
 
         static void AddRule(AddRuleOptions options) {
-            if (options.Type == "sc")
-            {
-                BGWorker.AddRule(options.URL, int.Parse(options.Time), options.Content);
-            }
-            else if (options.Type == "cc")
-            {
-                BGWorker.AddRule(options.URL, int.Parse(options.Time));
-            }
+            BGWorker.AddRule(options.Type, options.URL, int.Parse(options.Time), options.Content);
         }
 
         static void LoadFile(LoadFileOptions options) {

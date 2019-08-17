@@ -1,5 +1,22 @@
 # appo
-Content Alert
+<i>Content Alert</i>. <b>Monitoring for Website Changes</b>
+
+## Getting Started
+
+```sh
+$ git clone https://github.com/muhammedikinci/appo
+$ cd appo
+$ cd AppoAlert
+$ dotnet run
+```
+### Prerequisites
+
+- Dotnet Core 2^
+
+### Dependencies
+
+- CommandLineParser@2.6.0
+- Newtonsoft.Json@12.0.1
 
 ### Usage
 
@@ -93,6 +110,25 @@ Idled: 1
 >>
 ```
 
+Detect changes with the specified content
+
+```sh
+>>add-rule cc http://countdowntest.test/ 1000 <div id="defaultCountdown" class="hasCountdown">16 Hours 44 Minutes</div> 
+Success: New rule added. Rule Id 0
+>>start 0
+0 Started!
+>>RULE WORKER >> <RULE:0> The specified content was changed or removed.
+>>rules
+
+│ RuleID: 0   │ URL: http://countdowntest.test/   │ RefreshTime: 1000   │ isRunning: 0   │
+
+──────────────────────────────────────
+Total Rules: 1
+Running Now: 0
+Idled: 1
+──────────────────────────────────────
+```
+
 ### Commands
 
 | Command Name | Status |
@@ -105,8 +141,8 @@ Idled: 1
 | remove-rule <<rule_id>> | OK |
 | remove-all | OK |
 | rules | OK |
-| start all | OK |
-| stop all | OK |
+| start-all | OK |
+| stop-all | OK |
 
 ### Features
 
@@ -126,3 +162,7 @@ Idled: 1
 | Linux  | NONE YET |
 | Windows | NONE YET |
 | MacOs | NONE YET |
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

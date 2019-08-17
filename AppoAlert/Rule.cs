@@ -13,5 +13,6 @@ namespace AppoAlert
         public string Hash { get; set; }
         public int RefreshTime { get; set; }
         public int Running { get; set; }
+        public string Type { get; set; }
     }
 }
