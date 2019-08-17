@@ -13,6 +13,23 @@ $ dotnet run
 
 - Dotnet Core 3.0.0-preview7-27912-14^
 
+### References
+
+In AppoAlert.csproj
+- System.Drawing.Common
+- System.Windows.Forms
+
+```xml
+<ItemGroup>
+    <Reference Include="System.Drawing.Common">
+        <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\3.0.0-preview7-27912-14\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+        <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\3.0.0-preview7-27912-14\System.Windows.Forms.dll</HintPath>
+    </Reference>
+</ItemGroup>
+```
+
 ### Dependencies
 
 - CommandLineParser@2.6.0
