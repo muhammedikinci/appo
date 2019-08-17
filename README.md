@@ -11,7 +11,7 @@ $ dotnet run
 ```
 ### Prerequisites
 
-- Dotnet Core 2^
+- Dotnet Core 3.0.0-preview7-27912-14
 
 ### Dependencies
 
@@ -152,7 +152,7 @@ Idled: 1
 | ------ | ------ |
 | Open program  | NONE YET |
 | Send Mail | NONE YET |
-| Print Alert | NONE YET |
+| Print Alert | OK |
 | Print message in command prompt/terminal | OK |
 
 #### Working On SystemTray

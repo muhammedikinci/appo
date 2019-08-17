@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
+using System.Windows.Forms;
 
 namespace AppoAlert
 {
@@ -130,7 +131,9 @@ namespace AppoAlert
                             {
                                 if (webSiteContent.IndexOf(selectedRule.SearchedContent) != -1)
                                 {
-                                    Console.WriteLine("RULE WORKER >> <RULE:" + selectedRule.RuleID + "> Searched content founded");
+                                    string Message = "RULE WORKER >> <RULE:" + selectedRule.RuleID + "> Searched content founded";
+                                    Console.WriteLine(Message);
+                                    MessageBox.Show(Message);
 
                                     selectedRule.Running = 0;
                                     break;
@@ -139,7 +142,9 @@ namespace AppoAlert
 
                             if (selectedRule.Hash != hash && selectedRule.Type == "cc" && selectedRule.SearchedContent == "")
                             {
-                                Console.WriteLine("RULE WORKER >> <RULE:" + selectedRule.RuleID + "> Changes are detected in content");
+                                string Message = "RULE WORKER >> <RULE:" + selectedRule.RuleID + "> Changes are detected in content";
+                                Console.WriteLine(Message);
+                                MessageBox.Show(Message);
                                 selectedRule.Hash = hash;
 
                                 selectedRule.Running = 0;
@@ -147,7 +152,9 @@ namespace AppoAlert
                             }
                             else if (selectedRule.Type == "cc" && selectedRule.SearchedContent != "" && webSiteContent.IndexOf(selectedRule.SearchedContent) != -1)
                             {
-                                Console.WriteLine("RULE WORKER >> <RULE:" + selectedRule.RuleID + "> The specified content was changed or removed.");
+                                string Message = "RULE WORKER >> <RULE:" + selectedRule.RuleID + "> The specified content was changed or removed.";
+                                Console.WriteLine(Message);
+                                MessageBox.Show(Message);
 
                                 selectedRule.Running = 0;
                                 break;
