@@ -41,7 +41,7 @@ Search in web content
 
 ```sh
 // search content
->> add-rule sc http://localhost Happy! 1000
+>> add-rule sc http://localhost 1000 Happy!
 >> start 0
 ```
 
